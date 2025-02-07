@@ -41,38 +41,16 @@ struct RecipeListView: View {
         NavigationView {
             Group {
                 if let errorMessage = viewModel.errorMessage {
-                    // Display error message
-                    VStack {
-                        Text("Error")
-                            .font(.headline)
-                        Text(errorMessage)
-                            .font(.subheadline)
-                            .foregroundColor(.red)
-                        Button("Retry") {
-                            Task {
-                                await viewModel.fetchRecipes()
-                            }
-                        }
-                    }
+                    errorView(errorMessage: errorMessage)
                 } else if viewModel.recipes.isEmpty {
-                    // Display empty state
-                    Text("No recipes available.")
-                        .font(.headline)
+                    emptyStateView()
                 } else {
-                    // Display recipe list
-                    List(viewModel.recipes) { recipe in
-                        VStack(alignment: .leading) {
-                            Text(recipe.name)
-                                .font(.headline)
-                            Text(recipe.cuisine)
-                                .font(.subheadline)
-                            ImageLoader.CachedImage(url: recipe.photoUrlSmall ?? "")
-                                .frame(height: 200)
-                        }
-                    }
+                    recipeListView()
                 }
             }
             .navigationTitle("Recipes")
+            .toolbarBackground(Color.blue, for: .navigationBar)
+            .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
                 Button(action: {
                     Task {
@@ -80,9 +58,72 @@ struct RecipeListView: View {
                     }
                 }) {
                     Image(systemName: "arrow.clockwise")
+                        .foregroundColor(.black)
                 }
             }
         }
     }
-}
 
+    // Error View
+    private func errorView(errorMessage: String) -> some View {
+        VStack(spacing: 16) {
+            Text("Error")
+                .font(.headline)
+                .foregroundColor(.red)
+            Text(errorMessage)
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+            Button("Retry") {
+                Task {
+                    await viewModel.fetchRecipes()
+                }
+            }
+            .padding()
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(8)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(.systemGray6))
+    }
+
+    // Empty State View
+    private func emptyStateView() -> some View {
+        VStack {
+            Text("No recipes available.")
+                .font(.headline)
+                .foregroundColor(.primary)
+            Text("Please check back later.")
+                .font(.subheadline)
+                .foregroundColor(.secondary)
+        }
+        .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color(.systemGray6))
+    }
+
+    // Recipe List View
+    private func recipeListView() -> some View {
+        List(viewModel.recipes) { recipe in
+            VStack(alignment: .leading, spacing: 8) {
+                Text(recipe.name)
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                Text(recipe.cuisine)
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                ImageLoader.CachedImage(url: recipe.photoUrlSmall ?? "")
+                    .frame(height: 200)
+                    .cornerRadius(8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.blue.opacity(0.3), lineWidth: 1)
+                    )
+            }
+            .padding(.vertical, 8)
+            .listRowBackground((viewModel.recipes.firstIndex(of: recipe) ?? 0) % 2 == 0 ? Color.white : Color(.systemGray6))
+        }
+        .listStyle(.plain)
+    }
+}
