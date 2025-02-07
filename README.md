@@ -8,15 +8,15 @@ The Recipe App is a SwiftUI-based application that fetches and displays recipes 
 
 #### **Screenshots**
 1. **Recipe Page**:
-   ![Recipe Page](/Users/kash/Desktop/Recipe-Page.png)
+   ![Recipe Page](images/Recipe-Page.png)
    - Displays a list of recipes with their name, cuisine type, and photo.
 
 2. **Malformed Endpoint**:
-   ![Malformed Endpoint](/Users/kash/Desktop/Recipe-Malformed-Endpoint.png)
+   ![Malformed Endpoint](images/Recipe-Malformed-Endpoint.png)
    - Shows an error message when the data is malformed.
 
 3. **Empty Endpoint**:
-   ![Empty Endpoint](/Users/kash/Desktop/Recipe-Empty-Endpoint.png)
+   ![Empty Endpoint](images/Recipe-Empty-Endpoint.png)
    - Displays an empty state when no recipes are available.
 
 ---
