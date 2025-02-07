@@ -32,7 +32,7 @@ struct Recipe: Codable, Identifiable, Equatable {
 
 class RecipeManager {
     
-    let apiEndpoint = "https://d3jbb8n5wk0qxi.cloudfront.net/recipes.json"
+    let apiEndpoint = "https://d3jbb8n5wk0qxi.cloudfront.net/recipes-empty.json"
 
     func fetchRecipes(from urlString: String) async throws -> [Recipe] {
         guard let url = URL(string: urlString) else {
